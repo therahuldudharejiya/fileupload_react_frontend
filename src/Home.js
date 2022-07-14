@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
@@ -30,6 +30,13 @@ const UploadFile = () => {
     const[isSubmit,setIsSubmit] = useState(false);
     const[alert,setAlert] = useState({});
     const[data,setData]=useState([]);
+
+    const ref = useRef();
+
+    const reset = () => {
+        ref.current.value = "";
+    };
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -49,6 +56,7 @@ const UploadFile = () => {
                 if(res.data.status == 1){
                     fetchAllData();
                     setInputs(initialValues);
+                    reset();
                 }
                 setAlert({'status':res.data.status, 'message':res.data.message});
             }).catch((e)=>{
@@ -116,7 +124,7 @@ const UploadFile = () => {
                             <Col>
                                 <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label>Select Firmware</Form.Label>
-                                    <Form.Control name="firmware_file" type="file" onChange={handleFileChange} className="firmwarefile" required/>
+                                    <Form.Control name="firmware_file" type="file" ref={ref} onChange={handleFileChange} className="firmwarefile" required/>
                                     <div className="text-danger">{formErrors.firmware_file}</div>
                                 </Form.Group>
                             </Col>
